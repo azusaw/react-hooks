@@ -1,5 +1,6 @@
 .main {
-  background-color: pink;
+  background-color: aliceblue;
   padding: 6rem;
   min-height: 100vh;
+  color: dimgray;
 }

@@ -95,9 +95,30 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+h1 {
+  font-weight: bold;
+}
+
+h3 {
+  line-height: 2rem;
+  margin-bottom: 1rem;
+}
+
+p {
+  margin-bottom: 1rem;
+}
+
 a {
   color: inherit;
   text-decoration: none;
+}
+
+pre {
+  padding: 15px 10px;
+  border-radius: 5px;
+  background-color: dimgray;
+  color: aliceblue;
+  line-height: 1.5rem;
 }
 
 @media (prefers-color-scheme: dark) {
