@@ -5,6 +5,7 @@ import React, { createContext, useContext, useState } from "react";
 import UseContext from "@/components/UseContext";
 import UseRefComponent from "@/components/UseRef";
 import UseReducerComponent from "@/components/UseReducer";
+import UseCallbackComponent from "@/components/UseCallback";
 
 export const Count: React.Context<{
   count: number;
@@ -319,6 +320,81 @@ export default function Home() {
         </pre>
       ),
       children: <UseReducerComponent />,
+    },
+    {
+      title: "useCallback",
+      descriptionEn: (
+        <p>
+          {"useCallback Hook returns a memoized callback function. It conly runs when one of its dependencies update.\n" +
+            "This allows us to isolate resource intensive functions so that they will not automatically run on every render." +
+            "\n"}
+        </p>
+      ),
+      descriptionJp: (
+        <>
+          <p>
+            {"再レンダリングの間に関数定義をキャッシュする。\n第2引数の配列に格納された要素のいずれかが変更されたとき、関数が再生成される。\n" +
+              "依存配列の要素に変更がなければ、コンポーネントが再レンダリングされたとしても useCallback は同じ関数を返す。"}
+            {"第1引数: 対象の関数\n"}
+            {"第2引数: 依存配列\n"}
+            {"戻り値: メモ化された関数\n"}
+          </p>
+          <ul>
+            <li>
+              {
+                "useCallback を使う一番の目的は 不要なレンダリングを避けることであり、パフォーマンスの向上につながる。"
+              }
+            </li>
+            <li>
+              {
+                "第2引数の配列に格納された要素のいずれかが変更されたとき、関数が再生成される。"
+              }
+            </li>
+            <li>
+              {
+                "基本的に React.memo と併用して使う。同じ関数を返すことでコンポーネントに変更が発生しないので、レンダリングを避けられる。"
+              }
+            </li>
+          </ul>
+        </>
+      ),
+      codeSample: (
+        <pre>
+          {"const [todos, setTodos] = useState(initialTodos);\n" +
+            "const addTodo = useCallback(() => {\n" +
+            "  setTodos((t) => [\n" +
+            "    ...t,\n" +
+            "    {\n" +
+            "      id: todos.length + 1,\n" +
+            "      title: `Todo ${todos.length + 1}`,\n" +
+            "      complete: false,\n" +
+            "  }]);\n" +
+            "}, [todos]);\n\n" +
+            " <>\n" +
+            "  {todos.map((todo) => (\n" +
+            "    <Form.Check\n" +
+            "      key={todo.id}\n" +
+            "      checked={todo.complete}\n" +
+            "      label={todo.title}\n" +
+            "      onChange={() => {\n" +
+            "        let tmp = todos.map((item) =>\n" +
+            "          item.id === todo.id\n" +
+            "            ? {\n" +
+            "                id: todo.id,\n" +
+            "                title: todo.title,\n" +
+            "                complete: !todo.complete,\n" +
+            "               }\n" +
+            "            : item,\n" +
+            "        );\n" +
+            "        setTodos((t) => [...tmp]);\n" +
+            "      }}\n" +
+            "    />\n" +
+            "  ))}\n" +
+            '  <Button onClick={addTodo}>{"Add"}</Button>\n' +
+            "</>"}
+        </pre>
+      ),
+      children: <UseCallbackComponent />,
     },
   ];
 
