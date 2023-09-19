@@ -4,7 +4,7 @@ import DescriptionCard from "@/components/DescriptionCard";
 import React, { createContext, useContext, useState } from "react";
 import UseContext from "@/components/UseContext";
 import UseRefComponent from "@/components/UseRef";
-import { Button, Form } from "react-bootstrap";
+import UseReducerComponent from "@/components/UseReducer";
 
 export const Count: React.Context<{
   count: number;
@@ -112,7 +112,7 @@ export default function Home() {
         <>
           <p>
             {
-              "コンポーネントのツリー内でデータを共有するために使用される。\nこのフックを使用することでコンポーネントのプロパティにデータを渡すことなくコンポーネント間でデータを共有することができる\n"
+              "コンポーネントのツリー内でデータを共有するために使用される。\nコンポーネントのプロパティにデータを渡すことなく、コンポーネント間でデータを共有することができる。\n"
             }
             {"第1引数: 保持させたい値や関数"}
           </p>
@@ -153,13 +153,9 @@ export default function Home() {
             '/* child: Counter.tsx */\n"use client";\n' +
             'import { Count } from "@/app/page";\n\n' +
             "const { count, increment, decrement } = useContext(Count);\n\n" +
-            "<Button onClick={decrement}>" +
-            '  {"－"}' +
-            "</Button>" +
-            "  {count}" +
-            "<Button onClick={increment}>" +
-            '  {"＋"}' +
-            "</Button>"}
+            '<Button onClick={decrement}>{"－"}</Button>\n' +
+            "{count}\n" +
+            '<Button onClick={increment}>{"＋"}</Button>'}
         </pre>
       ),
       children: (
@@ -184,7 +180,7 @@ export default function Home() {
         <>
           <p>
             {
-              "DOM の参照、値の保持に使用される。\n初期値を引数に取り、useRef単一のプロパティを持つオブジェクトを返す。"
+              "主にDOM の参照に使用される。\nレンダリングに使用しない値の保持に使うこともできる。\n第1引数: 初期値"
             }
           </p>
           <ul>
@@ -217,6 +213,112 @@ export default function Home() {
         </pre>
       ),
       children: <UseRefComponent />,
+    },
+    {
+      title: "useReducer",
+      descriptionEn: (
+        <p>
+          {"useReducer Hook is similar to the useState Hook.\n" +
+            "If you find yourself keeping track of multiple pieces of state that rely on complex logic, useReducer may be useful.\n"}
+        </p>
+      ),
+      descriptionJp: (
+        <>
+          <p>
+            {
+              "状態を操作する複数のアクションに基づいて状態を更新することができる。\n第1引数: 状態を操作するアクション\n第2引数: 状態の初期値"
+            }
+          </p>
+          <ul>
+            <li>
+              {
+                "useStateと違い、状態を操作するための具体的な操作を複数定義できる。"
+              }
+            </li>
+            <li>
+              {
+                "例えばログインフォームでユーザー名やパスワードを管理する時など、それぞれを更新する操作を定義する場合にはuseReducerが適している。"
+              }
+            </li>
+            <li>
+              {
+                "dispatchに渡すオブジェクトは'アクションオブジェクト'と呼ばれ、アクションオブジェクトにはtypeプロパティを含む必要がある。"
+              }
+            </li>
+            <li>
+              {
+                "dispatch実行時に呼び出される'reducer'を必ず定義する必要がある。"
+              }
+            </li>
+            <li>
+              {
+                "reducerの第1引数: stateには定義した変数が丸ごと入っている。(今回の例ではinitialTodos)"
+              }
+            </li>
+            <li>
+              {
+                'reducerの第2引数: actionにはdispatchで渡した連想配列が入っている。(今回の例では{ type: "COMPLETE", id: todo.id }'
+              }
+            </li>
+            <li>
+              {
+                "サンプルコードでは変更の度にmapを実行するので、更新の効率が悪そう。login formなど単一オブジェクトの更新に向いているかも？"
+              }
+            </li>
+          </ul>
+        </>
+      ),
+      codeSample: (
+        <pre>
+          {'"use client";\n' +
+            'import { Form } from "react-bootstrap";\n\n' +
+            "const initialTodos = [\n" +
+            "  { id: 1,\n" +
+            '    title: "Todo 1",\n' +
+            "    complete: false },\n" +
+            "  { id: 2,\n" +
+            '    title: "Todo 2",\n' +
+            "    complete: false }\n" +
+            "];\n\n" +
+            "/* called by dispatch */\n" +
+            "const reducer = (state, action) => {\n" +
+            "  switch (action.type) {\n" +
+            '    case "COMPLETE":\n' +
+            "      console.log(state, action);\n" +
+            "      return state.map((todo) =>\n" +
+            "        todo.id === action.id ? { ...todo, complete: !todo.complete } : todo,\n" +
+            "      );\n" +
+            '    case "ADD":\n' +
+            "      /* need to create new array */\n" +
+            "      let tmp = state.map((todo) =>\n" +
+            "        todo.id === action.id ? { ...todo, complete: !todo.complete } : todo,\n" +
+            "      );\n" +
+            "      tmp.push({\n" +
+            "        id: state.length + 1,\n" +
+            "        title: `Todo ${state.length + 1}`,\n" +
+            "        complete: false,\n" +
+            "      });\n" +
+            "      return tmp;" +
+            "    default:\n" +
+            "      return state;\n" +
+            "  }\n" +
+            "};\n\n" +
+            "const [todos, dispatch] = useReducer(reducer, initialTodos);\n" +
+            "\n" +
+            "<>\n" +
+            "  {todos.map((todo) => (\n" +
+            "    <Form.Check\n" +
+            "      key={todo.id} checked={todo.complete} label={todo.title}\n" +
+            '      onChange={() => dispatch({ type: "COMPLETE", id: todo.id })}\n' +
+            "    />\n" +
+            "  ))}\n" +
+            '  <Button onClick={() => dispatch({ type: "ADD" })}>\n' +
+            '    {"Add"}\n' +
+            "  </Button>\n" +
+            "</>"}
+        </pre>
+      ),
+      children: <UseReducerComponent />,
     },
   ];
 
