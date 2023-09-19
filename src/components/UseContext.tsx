@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useContext } from "react";
 import { Count } from "@/app/page";
 import Counter from "@/components/Counter";

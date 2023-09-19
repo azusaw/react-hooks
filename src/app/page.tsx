@@ -1,11 +1,10 @@
 "use client";
-
 import styles from "./page.module.css";
 import DescriptionCard from "@/components/DescriptionCard";
 import React, { createContext, useContext, useState } from "react";
 import UseContext from "@/components/UseContext";
-import Counter from "@/components/Counter";
-import { Button } from "react-bootstrap";
+import UseRefComponent from "@/components/UseRef";
+import { Button, Form } from "react-bootstrap";
 
 export const Count: React.Context<{
   count: number;
@@ -74,9 +73,9 @@ export default function Home() {
       descriptionJp: (
         <>
           <p>
-            {
-              "関数コンポーネント内で副作用を処理するためのHook。\n第1引数: 副作用を処理する関数\n第2引数: 副作用を実行するタイミングを指定する依存配列"
-            }
+            {"関数コンポーネント内で副作用を処理するためのHook。\n" +
+              "第1引数: 副作用を処理する関数\n" +
+              "第2引数: 副作用を実行するタイミングを指定する依存配列"}
           </p>
           <ul>
             <li>{"第2引数が更新されるたびに第1引数の関数が実行される。"}</li>
@@ -149,11 +148,11 @@ export default function Home() {
             '/* parent: UseContext.tsx  */\n"use client";\n' +
             'import { Count } from "@/app/page";\n' +
             'import Counter from "@/components/Counter";\n\n' +
-            "const { count, increment, decrement } = useContext(Count);\n" +
+            "const { count, increment, decrement } = useContext(Count);\n\n" +
             "<Counter />\n\n\n" +
             '/* child: Counter.tsx */\n"use client";\n' +
             'import { Count } from "@/app/page";\n\n' +
-            "const { count, increment, decrement } = useContext(Count);\n" +
+            "const { count, increment, decrement } = useContext(Count);\n\n" +
             "<Button onClick={decrement}>" +
             '  {"－"}' +
             "</Button>" +
@@ -172,6 +171,52 @@ export default function Home() {
           </Count.Provider>
         </div>
       ),
+    },
+    {
+      title: "useRef",
+      descriptionEn: (
+        <p>
+          {"useRef allows you to persist values between renders.\n" +
+            "It can be used to store a mutable value that does not cause a re-render when updated.\n"}
+        </p>
+      ),
+      descriptionJp: (
+        <>
+          <p>
+            {
+              "DOM の参照、値の保持に使用される。\n初期値を引数に取り、useRef単一のプロパティを持つオブジェクトを返す。"
+            }
+          </p>
+          <ul>
+            <li>
+              {
+                "ref.currentの値を変更させているだけなので、再レンダリングが走らないことが特徴。"
+              }
+            </li>
+            <li>
+              {
+                "DOMに対する参照として使われることが多い。（サンプルコードを参照）"
+              }
+            </li>
+          </ul>
+        </>
+      ),
+      codeSample: (
+        <pre>
+          {'const [name, setName] = useState("");\n' +
+            "const refNum = useRef<number>(0);\n" +
+            "const refEl = useRef<HTMLInputElement>(null);\n\n" +
+            "/* refer and update */\n" +
+            "const value = refNum.current;\n" +
+            "refNum.current = 2;\n\n" +
+            "const focusInputBox = () => refEl.current.focus();\n" +
+            "const focusOutInputBox = () => refEl.current.blur();\n\n" +
+            "<Form.Control ref={ref} value={name} onChange={(e) => setName(e.target.value)} />\n" +
+            "<Button onClick={focusInputBox}>Focus on box</Button>\n" +
+            "<Button onClick={focusOutInputBox}>Focus out from box</Button>\n"}
+        </pre>
+      ),
+      children: <UseRefComponent />,
     },
   ];
 

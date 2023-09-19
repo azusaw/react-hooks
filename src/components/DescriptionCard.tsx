@@ -1,5 +1,6 @@
 import styles from "./DescriptionCard.module.css";
 import React, { ReactElement } from "react";
+import { Container } from "react-bootstrap";
 
 type Props = {
   title: string;
@@ -16,7 +17,7 @@ const DescriptionCard: React.FC<Props> = (props) => {
       {props.descriptionEn}
       {props.descriptionJp}
       {props.codeSample}
-      {props.children}
+      <Container>{props.children}</Container>
     </div>
   );
 };
