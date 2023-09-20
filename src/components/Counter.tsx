@@ -5,6 +5,7 @@ import { Count } from "@/components/UseContext";
 
 const Counter: React.FC = () => {
   const { count, increment, decrement } = useContext(Count);
+
   return (
     <>
       <div>

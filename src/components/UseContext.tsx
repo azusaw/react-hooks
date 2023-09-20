@@ -2,11 +2,11 @@
 import React, { createContext, useState } from "react";
 import Counter from "@/components/Counter";
 
-export const Count: React.Context<{
-  count: number;
-  increment: () => number;
-  decrement: () => number;
-}> = createContext(0);
+export const Count = createContext({
+  count: 0,
+  decrement: undefined,
+  increment: undefined,
+});
 
 const UseContextComponent: React.FC = () => {
   const [count, setCount] = useState(0);
