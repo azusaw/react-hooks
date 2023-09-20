@@ -1,11 +1,13 @@
 "use client";
 import styles from "./page.module.css";
 import DescriptionCard from "@/components/DescriptionCard";
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useMemo, useState } from "react";
 import UseContext from "@/components/UseContext";
 import UseRefComponent from "@/components/UseRef";
 import UseReducerComponent from "@/components/UseReducer";
 import UseCallbackComponent from "@/components/UseCallback";
+import UseMemoComponent from "@/components/UseMemo";
+import WithoutUseMemo from "@/components/WithoutUseMemo";
 
 export const Count: React.Context<{
   count: number;
@@ -325,7 +327,7 @@ export default function Home() {
       title: "useCallback",
       descriptionEn: (
         <p>
-          {"useCallback Hook returns a memoized callback function. It conly runs when one of its dependencies update.\n" +
+          {"useCallback Hook returns a memoized callback function. It only runs when one of its dependencies update.\n" +
             "This allows us to isolate resource intensive functions so that they will not automatically run on every render." +
             "\n"}
         </p>
@@ -395,6 +397,75 @@ export default function Home() {
         </pre>
       ),
       children: <UseCallbackComponent />,
+    },
+    {
+      title: "useMemo",
+      descriptionEn: (
+        <p>
+          {"useMemo Hook returns a memoized value. It only runs when one of its dependencies update.\n" +
+            "The useMemo and useCallback Hooks are similar. The main difference is that useMemo returns a memoized value and useCallback returns a memoized function.\n"}
+        </p>
+      ),
+      descriptionJp: (
+        <>
+          <p>
+            {
+              "useCallbackと同様に、パフォーマンス向上のためのHook。\n第2引数の配列に格納された要素のいずれかが変更されたとき、値が再計算される。\n"
+            }
+            {"第1引数: 対象の関数\n"}
+            {"第2引数: 依存配列\n"}
+            {"戻り値: メモ化された関数\n"}
+          </p>
+          <ul>
+            <li>
+              {
+                "useMemoは値だけでなくレンダリング結果もメモ化できるため、React.memoのようにコンポーネントの再レンダリングをスキップできる。"
+              }
+            </li>
+            <li>
+              {
+                "計算量が小さい場合には、useMemo を使うこと自体のオーバーヘッドが大きくな流可能性もある。"
+              }
+            </li>
+          </ul>
+        </>
+      ),
+      codeSample: (
+        <pre>
+          {'"use client";\n' +
+            'import React, { useMemo, useState } from "react";\n\n' +
+            "const [num1, setNum1] = useState(0);\n" +
+            "const [num2, setNum2] = useState(0);\n\n" +
+            "const double = (num) => {\n" +
+            "  let i = 0;\n" +
+            "  /* make slow */" +
+            "  while (i < 1000000000) i++;\n" +
+            "  return num * 2;\n" +
+            "};\n\n" +
+            "/* it called every time when component re-render */\n" +
+            "const doubledNum2 = double(num2);\n\n" +
+            "/* it calls double only num2 updated */\n" +
+            "const doubledNum2Memo = useMemo(() => double(num2), [num2]);\n\n" +
+            "<div>\n" +
+            "  Num 1: {num1}\n" +
+            "  <button onClick={() => setNum1(num1 + 1)}>+</button>\n" +
+            "  Num 2: {num2}\n" +
+            "  <button onClick={() => setNum2(num1 + 1)}>-</button>\n" +
+            "  Doubled Num 2: {doubledCount} {doubledNum2Memo}\n" +
+            "</div>"}
+        </pre>
+      ),
+      children: (
+        <>
+          <p>
+            {
+              "Increase Num1 and compare rendering speed. Without useMemo, unnecessary rendering occur when Num1 is updated."
+            }
+          </p>
+          <WithoutUseMemo />
+          <UseMemoComponent />
+        </>
+      ),
     },
   ];
 
