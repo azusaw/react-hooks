@@ -8,18 +8,9 @@ import UseReducerComponent from "@/components/UseReducer";
 import UseCallbackComponent from "@/components/UseCallback";
 import UseMemoComponent from "@/components/UseMemo";
 import WithoutUseMemo from "@/components/WithoutUseMemo";
+import { NextPage } from "next";
 
-export const Count: React.Context<{
-  count: number;
-  increment: () => number;
-  decrement: () => number;
-}> = createContext(0);
-
-export default function Home() {
-  const [count, setCount] = useState(0);
-  const decrement = () => setCount(count - 1);
-  const increment = () => setCount(count + 1);
-
+const Home: NextPage = () => {
   const hooks = [
     {
       title: "useState",
@@ -135,7 +126,7 @@ export default function Home() {
       ),
       codeSample: (
         <pre>
-          {'/* top: page.tsx */\n"use client";\n' +
+          {'/* parent: UseContext.tsx */\n"use client";\n' +
             'import React, { createContext, useContext, useState } from "react";\n\n' +
             "export const Count: React.Context<{\n" +
             "  count: number;\n" +
@@ -146,30 +137,17 @@ export default function Home() {
             "const decrement = () => setCount(count - 1);\n" +
             "const increment = () => setCount(count + 1)\n\n" +
             "<Count.Provider value={{ count, increment, decrement }}>\n" +
-            "  <UseContext />\n" +
+            "  <Counter />\n" +
             "</Count.Provider>\n\n\n" +
-            '/* parent: UseContext.tsx  */\n"use client";\n' +
-            'import { Count } from "@/app/page";\n' +
-            'import Counter from "@/components/Counter";\n\n' +
-            "const { count, increment, decrement } = useContext(Count);\n\n" +
-            "<Counter />\n\n\n" +
             '/* child: Counter.tsx */\n"use client";\n' +
-            'import { Count } from "@/app/page";\n\n' +
+            'import { Count } from "@/components/UseContext";\n\n' +
             "const { count, increment, decrement } = useContext(Count);\n\n" +
             '<Button onClick={decrement}>{"－"}</Button>\n' +
             "{count}\n" +
             '<Button onClick={increment}>{"＋"}</Button>'}
         </pre>
       ),
-      children: (
-        <div>
-          {"Count in page.tsx: "}
-          {count}
-          <Count.Provider value={{ count, increment, decrement }}>
-            <UseContext />
-          </Count.Provider>
-        </div>
-      ),
+      children: <UseContext />,
     },
     {
       title: "useRef",
@@ -487,4 +465,5 @@ export default function Home() {
       </div>
     </main>
   );
-}
+};
+export default Home;

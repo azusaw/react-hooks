@@ -1,7 +1,7 @@
 "use client";
 import React, { useContext } from "react";
 import { Button } from "react-bootstrap";
-import { Count } from "@/app/page";
+import { Count } from "@/components/UseContext";
 
 const Counter: React.FC = () => {
   const { count, increment, decrement } = useContext(Count);
