@@ -4,8 +4,8 @@ import Counter from "@/components/Counter";
 
 export const Count = createContext({
   count: 0,
-  decrement: undefined,
-  increment: undefined,
+  decrement: () => {},
+  increment: () => {},
 });
 
 const UseContextComponent: React.FC = () => {

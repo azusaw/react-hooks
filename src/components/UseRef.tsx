@@ -6,8 +6,8 @@ const UseRefComponent: React.FC = () => {
   const [name, setName] = useState("");
   const refEl = useRef<HTMLInputElement>(null);
   const refNum = useRef<number>(0);
-  const focusInputBox = () => refEl.current.focus();
-  const focusOutInputBox = () => refEl.current.blur();
+  const focusInputBox = () => refEl?.current?.focus();
+  const focusOutInputBox = () => refEl?.current?.blur();
 
   /* it can be effected to screen */
   refNum.current = 2;
