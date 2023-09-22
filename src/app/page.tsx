@@ -12,6 +12,8 @@ import WithoutMemo from "@/components/WithoutMemo";
 
 import ReactMemo from "@/components/ReactMemo";
 
+/* Nextにページコンポーネントであることを認識させる。
+  この型を注釈しておくと、関数の実装がページコンポーネントの要件を満たしているかがチェックできる */
 const Home: NextPage = () => {
   const hooks = [
     {
