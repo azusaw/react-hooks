@@ -10,7 +10,7 @@ import UseCallbackComponent from "@/components/UseCallback";
 import UseMemoComponent from "@/components/UseMemo";
 import WithoutMemo from "@/components/WithoutMemo";
 
-import ReactMemoComponent from "@/components/ReactMemo";
+import ReactMemo from "@/components/ReactMemo";
 
 const Home: NextPage = () => {
   const hooks = [
@@ -507,7 +507,7 @@ const Home: NextPage = () => {
             }
           </p>
           <WithoutMemo />
-          <ReactMemoComponent />
+          <ReactMemo />
         </>
       ),
     },

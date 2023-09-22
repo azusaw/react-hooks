@@ -1,8 +1,8 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 
-const ReactMemoComponent: React.FC = () => {
+const ReactMemo: React.FC = () => {
   const [num1, setNum1] = useState(0);
   const [num2, setNum2] = useState(0);
 
@@ -17,12 +17,14 @@ const ReactMemoComponent: React.FC = () => {
   //   return <a>{double(num)}</a>;
   // });
 
-  /* it did not work */
-  const DoubledNum2Memo = React.memo((props: { num2 }) => {
+  const DoubleComponent = () => {
     let i = 0;
     while (i < 1000000000) i++;
-    return <span>{props.num2 * 2}</span>;
-  });
+    return <span>num2 * 2</span>;
+  };
+
+  /* it did not work */
+  const DoubledNum2Memo = React.memo((props: { num2 }) => <DoubleComponent />);
 
   return (
     <div
@@ -62,4 +64,4 @@ const ReactMemoComponent: React.FC = () => {
   );
 };
 
-export default ReactMemoComponent;
+export default ReactMemo;
