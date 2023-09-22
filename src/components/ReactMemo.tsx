@@ -2,7 +2,7 @@
 import React, { useMemo, useState } from "react";
 import { Button } from "react-bootstrap";
 
-const WithoutUseMemoComponent: React.FC = () => {
+const ReactMemoComponent: React.FC = () => {
   const [num1, setNum1] = useState(0);
   const [num2, setNum2] = useState(0);
 
@@ -12,8 +12,17 @@ const WithoutUseMemoComponent: React.FC = () => {
     return num * 2;
   };
 
-  /* it called every time when component re-render */
-  const doubledNum2 = double(num2);
+  /* it didn't work because of callback? */
+  // const DoubledNum2MemoNotWork = React.memo(({ num }: any) => {
+  //   return <a>{double(num)}</a>;
+  // });
+
+  /* it did not work */
+  const DoubledNum2Memo = React.memo((props: { num2 }) => {
+    let i = 0;
+    while (i < 1000000000) i++;
+    return <span>{props.num2 * 2}</span>;
+  });
 
   return (
     <div
@@ -25,7 +34,7 @@ const WithoutUseMemoComponent: React.FC = () => {
       }}
     >
       <div>
-        <h6>{"Without useMemo"}</h6>
+        <h6>{"With React.Memo"}</h6>
         {"Num 1: "}
         {num1}
         <Button
@@ -47,11 +56,10 @@ const WithoutUseMemoComponent: React.FC = () => {
       </div>
       <div style={{ marginTop: "1rem" }}>
         {"Doubled Num 2: "}
-        {doubledNum2}
-        {" ... make slower by loop!"}
+        <DoubledNum2Memo num2={num2} />
       </div>
     </div>
   );
 };
 
-export default WithoutUseMemoComponent;
+export default ReactMemoComponent;

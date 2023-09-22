@@ -1,14 +1,16 @@
 "use client";
 import styles from "./page.module.css";
-import DescriptionCard from "@/components/DescriptionCard";
 import React, { useContext, useMemo, useState } from "react";
+import { NextPage } from "next";
+import DescriptionCard from "@/components/DescriptionCard";
 import UseContext from "@/components/UseContext";
 import UseRefComponent from "@/components/UseRef";
 import UseReducerComponent from "@/components/UseReducer";
 import UseCallbackComponent from "@/components/UseCallback";
 import UseMemoComponent from "@/components/UseMemo";
-import WithoutUseMemo from "@/components/WithoutUseMemo";
-import { NextPage } from "next";
+import WithoutMemo from "@/components/WithoutMemo";
+
+import ReactMemoComponent from "@/components/ReactMemo";
 
 const Home: NextPage = () => {
   const hooks = [
@@ -392,12 +394,12 @@ const Home: NextPage = () => {
             }
             {"第1引数: 対象の関数\n"}
             {"第2引数: 依存配列\n"}
-            {"戻り値: メモ化された関数\n"}
+            {"戻り値: メモ化された値\n"}
           </p>
           <ul>
             <li>
               {
-                "useMemoは値だけでなくレンダリング結果もメモ化できるため、React.memoのようにコンポーネントの再レンダリングをスキップできる。"
+                "useMemoは計算結果の値をメモ化し、React.memoのようにコンポーネントの再レンダリングをスキップできる。"
               }
             </li>
             <li>
@@ -428,7 +430,71 @@ const Home: NextPage = () => {
             "  Num 1: {num1}\n" +
             "  <button onClick={() => setNum1(num1 + 1)}>+</button>\n" +
             "  Num 2: {num2}\n" +
-            "  <button onClick={() => setNum2(num1 + 1)}>-</button>\n" +
+            "  <button onClick={() => setNum2(num2 + 1)}>-</button>\n" +
+            "  Doubled Num 2: {doubledCount} <DoubledNum2Memo num2={num2} />\n" +
+            "</div>"}
+        </pre>
+      ),
+      children: (
+        <>
+          <p>
+            {
+              "Increase Num1 and compare rendering speed. Without useMemo, unnecessary rendering occur when Num1 is updated."
+            }
+          </p>
+          <WithoutMemo />
+          <UseMemoComponent />
+        </>
+      ),
+    },
+    {
+      title: "React.Memo",
+      descriptionEn: (
+        <p>
+          {
+            "memo lets you skip re-rendering a component when its props are unchanged.\n"
+          }
+        </p>
+      ),
+      descriptionJp: (
+        <>
+          <p>
+            {
+              "上記2つと同様に、パフォーマンス向上のためのHook。\n第1引数のいずれかが変更されたとき、値が再計算される。\n"
+            }
+            {"第1引数: 依存配列\n"}
+            {"戻り値: メモ化されたコンポーネント\n"}
+          </p>
+          <ul>
+            <li>
+              {
+                "コンポーネントメモ化し、React.memoのようにコンポーネントの再レンダリングをスキップできる。"
+              }
+            </li>
+            <li>
+              {
+                "クリック時のハンドラなどコールバック関数を渡す場合は、React.memoを使っても再レンダーされてしまう。useCallbackを使って関数をメモ化する必要がある。"
+              }
+            </li>
+          </ul>
+        </>
+      ),
+      codeSample: (
+        <pre>
+          {'"use client";\n' +
+            'import React, { useMemo, useState } from "react";\n\n' +
+            "const [num1, setNum1] = useState(0);\n" +
+            "const [num2, setNum2] = useState(0);\n\n" +
+            "const DoubledNum2Memo = React.memo((props: { num2: number }) => {\n" +
+            "  let i = 0;\n" +
+            "  while (i < 1000000000) i++;\n" +
+            "  return <span>{props.num2 * 2}</span>;\n" +
+            "});\n\n" +
+            "<div>\n" +
+            "  Num 1: {num1}\n" +
+            "  <button onClick={() => setNum1(num1 + 1)}>+</button>\n" +
+            "  Num 2: {num2}\n" +
+            "  <button onClick={() => setNum2(num2 + 1)}>-</button>\n" +
             "  Doubled Num 2: {doubledCount} {doubledNum2Memo}\n" +
             "</div>"}
         </pre>
@@ -440,8 +506,8 @@ const Home: NextPage = () => {
               "Increase Num1 and compare rendering speed. Without useMemo, unnecessary rendering occur when Num1 is updated."
             }
           </p>
-          <WithoutUseMemo />
-          <UseMemoComponent />
+          <WithoutMemo />
+          <ReactMemoComponent />
         </>
       ),
     },

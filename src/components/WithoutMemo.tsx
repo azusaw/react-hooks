@@ -1,8 +1,8 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 
-const UseMemoComponent: React.FC = () => {
+const WithoutMemoComponent: React.FC = () => {
   const [num1, setNum1] = useState(0);
   const [num2, setNum2] = useState(0);
 
@@ -12,8 +12,8 @@ const UseMemoComponent: React.FC = () => {
     return num * 2;
   };
 
-  /* it calls double only when num2 updated */
-  const doubledNum2Memo = useMemo(() => double(num2), [num2]);
+  /* it called every time when component re-render */
+  const doubledNum2 = double(num2);
 
   return (
     <div
@@ -25,7 +25,7 @@ const UseMemoComponent: React.FC = () => {
       }}
     >
       <div>
-        <h6>{"With useMemo"}</h6>
+        <h6>{"Without useMemo"}</h6>
         {"Num 1: "}
         {num1}
         <Button
@@ -47,10 +47,11 @@ const UseMemoComponent: React.FC = () => {
       </div>
       <div style={{ marginTop: "1rem" }}>
         {"Doubled Num 2: "}
-        {doubledNum2Memo}
+        {doubledNum2}
+        {" ... make slower by loop!"}
       </div>
     </div>
   );
 };
 
-export default UseMemoComponent;
+export default WithoutMemoComponent;
