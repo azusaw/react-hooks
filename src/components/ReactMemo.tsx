@@ -17,14 +17,16 @@ const ReactMemo: React.FC = () => {
   //   return <a>{double(num)}</a>;
   // });
 
-  const DoubleComponent = () => {
+  const DoubleComponent = (props: { num2 }) => {
     let i = 0;
     while (i < 1000000000) i++;
-    return <span>num2 * 2</span>;
+    return <span>{props.num2 * 2}</span>;
   };
 
   /* it did not work */
-  const DoubledNum2Memo = React.memo((props: { num2 }) => <DoubleComponent />);
+  const DoubledNum2Memo = React.memo((props: { num2 }) => (
+    <DoubleComponent num2={props.num2} />
+  ));
 
   return (
     <div
